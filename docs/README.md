@@ -11,5 +11,6 @@
 
 ### Архитектура
 - [architecture/10-project-structure.md](architecture/10-project-structure.md) — Структура проекта
+- [architecture/20-component-architecture.md](architecture/20-component-architecture.md) — Архитектура компонентов
 - [architecture/20-clean-architecture.md](architecture/20-clean-architecture.md) — Чистая архитектура
 - [architecture/30-decision-log.md](architecture/30-decision-log.md) — Журнал решений
