@@ -1,44 +1,24 @@
 import { useState } from 'react';
+import { useTodos } from './hooks';
 
 function App() {
-  const [newTodoText, setNewTodoText] = useState('');
-  const [todos, setTodos] = useState<{ id: string; title: string }[]>([]);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editingText, setEditingText] = useState('');
+  const {
+    todos,
+    editingId,
+    editingText,
+    handleEditingTextChange,
+    addTodo,
+    deleteTodo,
+    startEdit,
+    saveEdit,
+    cancelEdit,
+  } = useTodos();
 
-  const resetEditingState = () => {
-    setEditingId(null);
-    setEditingText('');
-  };
+  const [newTodoText, setNewTodoText] = useState('');
 
   const handleAddTodo = () => {
-    const trimmed = newTodoText.trim();
-    if (trimmed === '') return;
-    setTodos([...todos, { id: crypto.randomUUID(), title: trimmed }]);
+    addTodo(newTodoText);
     setNewTodoText('');
-  };
-
-  const handleDeleteTodo = (idToDelete: string) => {
-    setTodos(todos.filter((todo) => todo.id !== idToDelete));
-  };
-
-  const handleEditTodo = (id: string, currentTitle: string) => {
-    setEditingId(id);
-    setEditingText(currentTitle);
-  };
-
-  const handleSaveEdit = (idToSave: string) => {
-    const trimmed = editingText.trim();
-    if (trimmed === '') {
-      resetEditingState();
-      return;
-    }
-    setTodos(todos.map((todo) => todo.id === idToSave ? { ...todo, title: trimmed } : todo));
-    resetEditingState();
-  };
-
-  const handleCancelEdit = () => {
-    resetEditingState();
   };
 
   return (
@@ -62,23 +42,23 @@ function App() {
               <>
                 <input
                   value={editingText}
-                  onChange={(event) => setEditingText(event.target.value)}
+                  onChange={(event) => handleEditingTextChange(event.target.value)}
                   aria-label="Редактирование задачи"
                 />
-                <button onClick={() => handleSaveEdit(todo.id)}>
+                <button onClick={() => saveEdit(todo.id)}>
                   Сохранить
                 </button>
-                <button onClick={handleCancelEdit}>
+                <button onClick={cancelEdit}>
                   Отмена
                 </button>
               </>
             ) : (
               <>
                 {todo.title}
-                <button onClick={() => handleEditTodo(todo.id, todo.title)}>
+                <button onClick={() => startEdit(todo.id, todo.title)}>
                   Редактировать
                 </button>
-                <button onClick={() => handleDeleteTodo(todo.id)}>
+                <button onClick={() => deleteTodo(todo.id)}>
                   Удалить
                 </button>
               </>
